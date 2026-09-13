@@ -180,19 +180,6 @@ body.locked{overflow:hidden}
 .empty .e-ico{font-size:46px;display:block;margin-bottom:14px;opacity:.6}
 .empty strong{display:block;color:var(--muted);font-size:14.5px;margin-bottom:6px}
 
-/* Instructor Accordion */
-details.instr{margin-top:22px;border-radius:14px;border:1px solid var(--stroke);
-  background:rgba(56,189,248,.05);overflow:hidden}
-details.instr summary{padding:14px 18px;cursor:pointer;font-size:13px;
-  font-weight:700;color:#7dd3fc;list-style:none;
-  display:flex;align-items:center;gap:9px}
-details.instr summary::-webkit-details-marker{display:none}
-details.instr summary::after{content:'▾';margin-left:auto;transition:.3s}
-details.instr[open] summary::after{transform:rotate(180deg)}
-details.instr .body{padding:0 18px 18px;font-size:12.4px;color:var(--muted);line-height:1.8}
-details.instr code{font-family:'JetBrains Mono',monospace;font-size:11.5px;
-  background:rgba(0,0,0,.4);padding:2px 6px;border-radius:5px;color:var(--green-soft)}
-
 /* Footer */
 footer{margin-top:70px;padding:34px 0 40px;border-top:1px solid var(--stroke);
   text-align:center;background:linear-gradient(180deg,transparent,rgba(34,197,94,.05))}
@@ -294,7 +281,7 @@ footer .sig{margin-top:12px;font-size:12px;color:var(--muted)}
     </div>
     <div class="modal-badge">Official Course Material</div>
     <h2>Welcome to the Data Science Analytics Hub!</h2>
-    <p class="who">A message from Sir Lee-Mher</p>
+    <p class="who">A message from Sir Lee</p>
     <div class="modal-msg">
       <p><span class="hi">Kumusta, future Data Scientists! 👋</span> I'm <strong>Sir Lee-Mher</strong>, and I'm truly glad you're here.</p>
       <p>This page is <strong>dedicated exclusively to our Data Science Analytics subject</strong> at <strong>Isabela State University – College of Computing Studies, Information and Communication Technology (CCSICT)</strong>.</p>
@@ -386,22 +373,6 @@ footer .sig{margin-top:12px;font-size:12px;color:var(--muted)}
     </div>
 
     <div class="lib-grid" id="libGrid"></div>
-
-    <details class="instr">
-      <summary>📘 For the Instructor — How to add files to the shared library</summary>
-      <div class="body">
-        <p>GitHub Pages cannot accept uploads from a webpage. To add a new dataset everyone can download:</p>
-        <ol style="padding-left:20px;margin:10px 0">
-          <li>Put the Excel file in the same folder as <code>index.html</code>.</li>
-          <li>Add a new entry to the <code>DATASETS</code> array inside the <code>&lt;script&gt;</code> tag of this file.</li>
-          <li>Commit and push to GitHub:</li>
-        </ol>
-        <pre style="background:rgba(0,0,0,.5);padding:14px;border-radius:10px;overflow-x:auto;margin:10px 0;border:1px solid var(--stroke);"><code>git add .
-git commit -m "Add new dataset"
-git push origin main</code></pre>
-        <p>The dataset appears in the shared library within seconds of the GitHub Pages deploy.</p>
-      </div>
-    </details>
   </section>
 </div>
 
@@ -539,7 +510,6 @@ function renderLibrary(){
           <span class="badge gray">XLSX</span>
         </div>
         <div class="acts">
-          <!-- FIXED: Added target="_blank" and ./ to force download/open -->
           <a class="mini" href="./${esc(f.name)}" download target="_blank">⬇ Download</a>
         </div>
       </article>`;
