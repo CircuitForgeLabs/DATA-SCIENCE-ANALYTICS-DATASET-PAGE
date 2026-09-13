@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Science Analytics Hub | ISU – CCSICT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03150d; --panel:rgba(255,255,255,.045);
+  --stroke:rgba(74,222,128,.20); --stroke-2:rgba(74,222,128,.40);
+  --green:#22c55e; --green-bright:#4ade80; --green-soft:#86efac;
+  --mint:#bbf7d0; --gold:#d9bc55; --cyan:#38bdf8;
+  --text:#e9fff4; --muted:#8db8a3; --muted-2:#6b9b85;
+  --radius:18px; --shadow:0 18px 50px rgba(0,0,0,.45);
+  --glow:0 0 28px rgba(34,197,94,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;line-height:1.6}
+body.locked{overflow:hidden}
+
+/* Background */
+.bg-grid{position:fixed;inset:0;z-index:-3;
+  background-image:linear-gradient(rgba(34,197,94,.075) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,197,94,.075) 1px,transparent 1px);
+  background-size:52px 52px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 15%,transparent 78%);
+  mask-image:radial-gradient(ellipse at 50% 0%,#000 15%,transparent 78%);}
+.bg-glow{position:fixed;inset:0;z-index:-4;
+  background:radial-gradient(900px 520px at 12% -5%,rgba(34,197,94,.28),transparent 65%),
+    radial-gradient(760px 480px at 88% 8%,rgba(56,189,248,.14),transparent 65%),
+    radial-gradient(1000px 620px at 50% 110%,rgba(34,197,94,.16),transparent 65%),
+    linear-gradient(180deg,#03150d,#041c11 45%,#03150d);}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);opacity:.32;z-index:-2;
+  animation:drift 18s ease-in-out infinite alternate}
+.orb.a{width:340px;height:340px;background:#22c55e;top:-70px;left:-90px}
+.orb.b{width:300px;height:300px;background:#0ea5e9;bottom:6%;right:-80px;animation-delay:-6s}
+.orb.c{width:260px;height:260px;background:#16a34a;top:44%;left:52%;animation-delay:-11s}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(40px,-50px,0) scale(1.15)}}
+
+/* Topbar */
+.topbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:18px;
+  padding:12px clamp(14px,3vw,38px);background:rgba(4,22,14,.78);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--stroke)}
+.logo{width:62px;height:62px;object-fit:contain;flex:none;
+  filter:drop-shadow(0 4px 14px rgba(0,0,0,.5));
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.4)}
+.logo:hover{transform:scale(1.09) rotate(-4deg)}
+.brand{flex:1;min-width:0}
+.brand h1{font-size:clamp(15px,2.1vw,21px);font-weight:800;letter-spacing:.4px;line-height:1.2;
+  background:linear-gradient(92deg,#bbf7d0,#4ade80 45%,#d9bc55);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{font-size:clamp(10px,1.25vw,12.5px);color:var(--muted);letter-spacing:.5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;gap:10px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:999px;
+  border:1px solid var(--stroke-2);background:rgba(34,197,94,.12);color:var(--mint);
+  font-size:12.5px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:.25s}
+.pill:hover{background:rgba(34,197,94,.26);box-shadow:var(--glow);transform:translateY(-2px)}
+.pill.ghost{background:transparent;color:var(--muted);border-color:rgba(255,255,255,.14)}
+.pill.ghost:hover{color:var(--mint);border-color:var(--stroke-2);box-shadow:none}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(14px,3vw,38px)}
+.hero{padding:54px 0 30px;text-align:center}
+.hero .tag{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;
+  margin-bottom:20px;border:1px solid var(--stroke-2);background:rgba(34,197,94,.10);
+  font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--green-soft)}
+.hero .tag .dot{width:8px;height:8px;border-radius:50%;background:var(--green-bright);
+  box-shadow:0 0 0 0 rgba(74,222,128,.8);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.75)}
+  70%{box-shadow:0 0 0 12px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+.hero h2{font-size:clamp(30px,6vw,60px);font-weight:800;line-height:1.08;
+  letter-spacing:-1px;margin-bottom:18px}
+.hero h2 span{background:linear-gradient(100deg,#4ade80,#a7f3d0 40%,#d9bc55);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero>p{max-width:760px;margin:0 auto 26px;color:var(--muted);
+  font-size:clamp(13.5px,1.7vw,16px)}
+.cheer{display:inline-block;margin-bottom:26px;padding:13px 26px;border-radius:999px;
+  border:1px dashed var(--stroke-2);background:rgba(34,197,94,.07);
+  font-size:clamp(12.5px,1.6vw,14.5px);font-weight:600;color:var(--mint);
+  transition:opacity .5s ease,transform .5s ease;min-height:48px}
+.cheer.swap{opacity:0;transform:translateY(9px)}
+.hero-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.stat{min-width:132px;padding:16px 22px;border-radius:16px;
+  border:1px solid var(--stroke);background:var(--panel);backdrop-filter:blur(8px)}
+.stat b{display:block;font-size:26px;font-weight:800;
+  font-family:'JetBrains Mono',monospace;color:var(--green-bright)}
+.stat span{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted-2)}
+
+/* Sections */
+.sec-head{display:flex;align-items:center;gap:14px;margin:52px 0 22px}
+.sec-head .bar{width:5px;height:32px;border-radius:6px;
+  background:linear-gradient(180deg,var(--green-bright),var(--gold))}
+.sec-head h3{font-size:clamp(18px,2.6vw,25px);font-weight:700}
+.sec-head p{font-size:13px;color:var(--muted-2);margin-left:auto;text-align:right}
+
+.sectors{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:18px}
+.sector{position:relative;overflow:hidden;cursor:pointer;padding:26px 24px;
+  border-radius:var(--radius);border:1px solid var(--stroke);background:var(--panel);
+  backdrop-filter:blur(9px);transition:.32s cubic-bezier(.2,.9,.3,1.2)}
+.sector::before{content:'';position:absolute;inset:0;opacity:0;transition:.32s;
+  background:radial-gradient(360px 200px at 20% 0%,var(--sc,rgba(34,197,94,.20)),transparent 70%)}
+.sector:hover{transform:translateY(-7px);border-color:var(--stroke-2);box-shadow:var(--shadow)}
+.sector:hover::before{opacity:1}
+.sector.active{border-color:var(--green-bright);
+  box-shadow:0 0 0 1px var(--green-bright),var(--glow)}
+.sector .ico{font-size:34px;display:grid;place-items:center;width:62px;height:62px;
+  border-radius:16px;margin-bottom:16px;position:relative;
+  background:rgba(255,255,255,.06);border:1px solid var(--stroke)}
+.sector h4{font-size:17.5px;font-weight:700;margin-bottom:6px;position:relative}
+.sector p{font-size:12.8px;color:var(--muted);position:relative;min-height:52px}
+.sector .meta{display:flex;align-items:center;justify-content:space-between;
+  margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);position:relative}
+.sector .count{font-family:'JetBrains Mono',monospace;font-size:13px;
+  font-weight:600;color:var(--green-bright)}
+.sector .go{font-size:12px;color:var(--muted-2);font-weight:600}
+
+/* Library */
+.panel{border-radius:var(--radius);border:1px solid var(--stroke);
+  background:var(--panel);backdrop-filter:blur(10px);padding:24px;box-shadow:var(--shadow)}
+.panel h4{font-size:15px;font-weight:700;margin-bottom:4px;
+  display:flex;align-items:center;gap:9px}
+.panel .sub{font-size:12.2px;color:var(--muted-2);margin-bottom:18px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap input{padding:12px 14px 12px 38px;width:100%;border-radius:12px;
+  background:rgba(0,0,0,.32);border:1px solid var(--stroke);color:var(--text);
+  font-family:inherit;font-size:13.5px;outline:none;transition:.24s}
+.search-wrap input:focus{border-color:var(--green-bright);box-shadow:0 0 0 3px rgba(74,222,128,.16)}
+.search-wrap .mag{position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:14px;opacity:.55}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 15px;border-radius:999px;cursor:pointer;font-size:12.2px;
+  font-weight:600;border:1px solid var(--stroke);background:transparent;
+  color:var(--muted);font-family:inherit;transition:.22s;white-space:nowrap}
+.chip:hover{color:var(--mint);border-color:var(--stroke-2)}
+.chip.on{background:rgba(34,197,94,.20);color:var(--green-bright);
+  border-color:var(--green-bright)}
+
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:13px;max-height:720px;overflow-y:auto;padding-right:5px}
+.file{position:relative;padding:17px;border-radius:15px;
+  border:1px solid var(--stroke);background:rgba(255,255,255,.035);
+  transition:.26s;animation:pop .4s cubic-bezier(.2,.9,.3,1.4);display:flex;flex-direction:column}
+.file:hover{transform:translateY(-4px);border-color:var(--stroke-2);
+  background:rgba(34,197,94,.08);box-shadow:var(--shadow)}
+@keyframes pop{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:none}}
+.file .top{display:flex;align-items:flex-start;gap:10px;margin-bottom:11px}
+.file .ficon{width:42px;height:42px;flex:none;border-radius:11px;
+  display:grid;place-items:center;font-size:19px;
+  background:rgba(34,197,94,.13);border:1px solid var(--stroke)}
+.file .fname{font-size:13px;font-weight:600;word-break:break-word;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.file .fdesc{font-size:11.5px;color:var(--muted-2);margin:-4px 0 9px;word-break:break-word;
+  flex-grow:1}
+.file .finfo{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}
+.badge{font-size:10.2px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:4px 9px;border-radius:7px;border:1px solid transparent}
+.badge.fisheries{background:rgba(56,189,248,.15);color:#7dd3fc;border-color:rgba(56,189,248,.32)}
+.badge.agriculture{background:rgba(34,197,94,.15);color:#86efac;border-color:rgba(34,197,94,.32)}
+.badge.marketing{background:rgba(251,191,36,.15);color:#fcd34d;border-color:rgba(251,191,36,.32)}
+.badge.gray{background:rgba(255,255,255,.07);color:var(--muted);border-color:rgba(255,255,255,.12)}
+.file .acts{display:flex;gap:8px;margin-top:auto}
+.mini{flex:1;padding:10px;border-radius:10px;border:1px solid var(--stroke);
+  background:rgba(34,197,94,.12);color:var(--mint);font-family:inherit;
+  font-size:12px;font-weight:700;cursor:pointer;transition:.22s;text-decoration:none;
+  text-align:center;display:inline-block}
+.mini:hover{background:rgba(34,197,94,.28);color:#fff;transform:scale(1.02)}
+
+.empty{grid-column:1/-1;text-align:center;padding:52px 20px;color:var(--muted-2);
+  border:1px dashed var(--stroke);border-radius:16px}
+.empty .e-ico{font-size:46px;display:block;margin-bottom:14px;opacity:.6}
+.empty strong{display:block;color:var(--muted);font-size:14.5px;margin-bottom:6px}
+
+/* Instructor Accordion */
+details.instr{margin-top:22px;border-radius:14px;border:1px solid var(--stroke);
+  background:rgba(56,189,248,.05);overflow:hidden}
+details.instr summary{padding:14px 18px;cursor:pointer;font-size:13px;
+  font-weight:700;color:#7dd3fc;list-style:none;
+  display:flex;align-items:center;gap:9px}
+details.instr summary::-webkit-details-marker{display:none}
+details.instr summary::after{content:'▾';margin-left:auto;transition:.3s}
+details.instr[open] summary::after{transform:rotate(180deg)}
+details.instr .body{padding:0 18px 18px;font-size:12.4px;color:var(--muted);line-height:1.8}
+details.instr code{font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  background:rgba(0,0,0,.4);padding:2px 6px;border-radius:5px;color:var(--green-soft)}
+
+/* Footer */
+footer{margin-top:70px;padding:34px 0 40px;border-top:1px solid var(--stroke);
+  text-align:center;background:linear-gradient(180deg,transparent,rgba(34,197,94,.05))}
+footer .flogos{display:flex;justify-content:center;gap:16px;margin-bottom:16px}
+footer .flogos img{width:52px;height:52px;object-fit:contain;opacity:.9}
+footer p{font-size:12.4px;color:var(--muted-2);line-height:1.9}
+footer p strong{color:var(--green-soft);font-weight:600}
+footer .sig{margin-top:12px;font-size:12px;color:var(--muted)}
+
+/* Toasts */
+#toasts{position:fixed;bottom:24px;right:24px;z-index:200;
+  display:flex;flex-direction:column;gap:10px}
+.toast{padding:13px 20px;border-radius:13px;font-size:13px;font-weight:600;
+  background:rgba(6,42,26,.96);border:1px solid var(--stroke-2);color:var(--mint);
+  box-shadow:var(--shadow);backdrop-filter:blur(10px);
+  animation:slideIn .4s cubic-bezier(.2,.9,.3,1.4);max-width:330px}
+.toast.err{border-color:rgba(248,113,113,.5);color:#fca5a5;background:rgba(45,10,10,.96)}
+.toast.out{opacity:0;transform:translateX(40px);transition:.4s}
+@keyframes slideIn{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+
+/* Modal */
+.modal{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:20px;
+  background:rgba(2,12,7,.86);backdrop-filter:blur(14px);animation:fadeIn .45s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal.hide{opacity:0;pointer-events:none;transition:.5s}
+.modal-card{position:relative;width:min(760px,100%);max-height:92vh;overflow-y:auto;
+  border-radius:26px;padding:clamp(26px,4.4vw,48px);
+  background:linear-gradient(160deg,#072a1a 0%,#04190f 60%,#062617 100%);
+  border:1px solid var(--stroke-2);
+  box-shadow:0 40px 90px rgba(0,0,0,.7),0 0 90px rgba(34,197,94,.14) inset;
+  animation:rise .6s cubic-bezier(.2,.9,.3,1.25);text-align:center}
+@keyframes rise{from{opacity:0;transform:translateY(44px) scale(.94)}to{opacity:1;transform:none}}
+.modal-card::before{content:'';position:absolute;inset:0;border-radius:26px;
+  pointer-events:none;
+  background:radial-gradient(600px 260px at 50% -10%,rgba(34,197,94,.22),transparent 70%)}
+.modal-logos{display:flex;justify-content:center;align-items:center;gap:20px;
+  margin-bottom:22px;position:relative}
+.modal-logos img{width:78px;height:78px;object-fit:contain;
+  filter:drop-shadow(0 6px 20px rgba(0,0,0,.6));animation:sway 4s ease-in-out infinite}
+.modal-logos img:nth-child(2){animation-delay:-2s}
+@keyframes sway{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(3deg)}}
+.modal-badge{display:inline-block;padding:6px 16px;border-radius:999px;margin-bottom:16px;
+  background:rgba(217,188,85,.12);border:1px solid rgba(217,188,85,.4);
+  color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase}
+.modal-card h2{font-size:clamp(22px,4vw,34px);font-weight:800;line-height:1.18;
+  margin-bottom:8px;background:linear-gradient(100deg,#bbf7d0,#4ade80 50%,#d9bc55);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.modal-card .who{font-size:13px;color:var(--gold);font-weight:600;
+  letter-spacing:.6px;margin-bottom:22px}
+.modal-msg{text-align:left;font-size:clamp(13px,1.7vw,14.6px);color:#cfe9dd;
+  line-height:1.85;padding:22px 24px;border-radius:16px;margin-bottom:22px;
+  background:rgba(34,197,94,.07);border:1px solid var(--stroke)}
+.modal-msg p{margin-bottom:13px}
+.modal-msg p:last-child{margin-bottom:0}
+.modal-msg .hi{color:var(--green-bright);font-weight:700}
+.modal-msg .quote{display:block;margin-top:16px;padding-left:15px;
+  border-left:3px solid var(--gold);color:var(--mint);font-style:italic;font-size:13.4px}
+.modal-feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:11px;margin-bottom:26px}
+.mf{padding:14px 10px;border-radius:13px;border:1px solid var(--stroke);
+  background:rgba(255,255,255,.035);font-size:11.6px;color:var(--muted);font-weight:600}
+.mf b{display:block;font-size:23px;margin-bottom:6px}
+.modal-card .btn{max-width:330px;margin:0 auto;width:100%;padding:14px;border:none;
+  border-radius:13px;font-family:inherit;font-size:14px;font-weight:700;
+  cursor:pointer;color:#04240f;
+  background:linear-gradient(100deg,#4ade80,#22c55e 55%,#16a34a);
+  box-shadow:0 10px 26px rgba(34,197,94,.32);transition:.25s}
+.modal-card .btn:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(34,197,94,.46)}
+
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
+::-webkit-scrollbar-thumb{background:rgba(34,197,94,.32);border-radius:9px}
+::-webkit-scrollbar-thumb:hover{background:rgba(34,197,94,.55)}
+
+@media(max-width:720px){
+  .topbar{gap:11px;padding:10px 14px}
+  .logo{width:46px;height:46px}
+  .top-actions .pill span.txt{display:none}
+  .pill{padding:9px 12px}
+  .sec-head p{display:none}
+  .hero{padding:36px 0 22px}
+  #toasts{left:14px;right:14px;bottom:14px}
+  .toast{max-width:100%}
+}
+</style>
+</head>
+<body class="locked">
+
+<div class="bg-glow"></div>
+<div class="bg-grid"></div>
+<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+
+<!-- WELCOME MODAL -->
+<div class="modal" id="welcomeModal">
+  <div class="modal-card">
+    <div class="modal-logos">
+      <img src="department-logo.png" alt="CCSICT Logo" onerror="this.style.display='none'">
+      <img src="school-logo.png" alt="ISU Logo" onerror="this.style.display='none'">
+    </div>
+    <div class="modal-badge">Official Course Material</div>
+    <h2>Welcome to the Data Science Analytics Hub!</h2>
+    <p class="who">A message from Sir Lee-Mher</p>
+    <div class="modal-msg">
+      <p><span class="hi">Kumusta, future Data Scientists! 👋</span> I'm <strong>Sir Lee-Mher</strong>, and I'm truly glad you're here.</p>
+      <p>This page is <strong>dedicated exclusively to our Data Science Analytics subject</strong> at <strong>Isabela State University – College of Computing Studies, Information and Communication Technology (CCSICT)</strong>.</p>
+      <p>Inside this hub you can <strong>download all 30 official datasets</strong> across three sectors — <strong>Fisheries 🐟</strong>, <strong>Agriculture 🌾</strong>, and <strong>Marketing 📈</strong>. These are your raw materials for cleaning, exploring, visualizing, and modeling.</p>
+      <p>Don't be afraid of messy data. Every great analyst started exactly where you are right now. Ask questions, break things, try again, and celebrate every small win. <strong>You belong in this field.</strong> 💚</p>
+      <span class="quote">“Data is the new soil — let us grow insights from it. Padayon, future Data Scientists!”</span>
+    </div>
+    <div class="modal-feats">
+      <div class="mf"><b>🐟</b>10 Fisheries Datasets</div>
+      <div class="mf"><b>🌾</b>10 Agriculture Datasets</div>
+      <div class="mf"><b>📈</b>10 Marketing Datasets</div>
+    </div>
+    <button class="btn" id="enterBtn">Enter the Hub 🚀</button>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <img class="logo" src="department-logo.png" alt="CCSICT Logo" onerror="this.style.display='none'">
+  <div class="brand">
+    <h1>Data Science Analytics Hub</h1>
+    <p>Isabela State University • College of Computing Studies, Information and Communication Technology</p>
+  </div>
+  <div class="top-actions">
+    <a href="#library" class="pill">📚 <span class="txt">Dataset Library</span></a>
+  </div>
+  <img class="logo" src="school-logo.png" alt="ISU Logo" onerror="this.style.display='none'">
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="tag"><span class="dot"></span> Course Material • Engr. Lee-Mher S. Binay-an</div>
+    <h2>Your <span>Dataset Hub</span> for<br>Data Science Analytics</h2>
+    <p>Download the official datasets for the Fisheries, Agriculture, and Marketing sectors — the perfect playground for cleaning, exploring, and modeling data.</p>
+    <div class="cheer" id="cheer">💚 Ready ka na ba? Let's turn raw data into real insight!</div>
+    <div class="hero-stats">
+      <div class="stat"><b id="statTotal">30</b><span>Datasets</span></div>
+      <div class="stat"><b id="statFish">10</b><span>Fisheries</span></div>
+      <div class="stat"><b id="statAgri">10</b><span>Agriculture</span></div>
+      <div class="stat"><b id="statMktg">10</b><span>Marketing</span></div>
+    </div>
+  </section>
+
+  <div class="sec-head">
+    <div class="bar"></div>
+    <h3>Browse by Sector</h3>
+    <p>Click a sector to filter the library</p>
+  </div>
+
+  <section class="sectors">
+    <div class="sector" data-sector="fisheries" style="--sc:rgba(56,189,248,.22)">
+      <div class="ico">🐟</div>
+      <h4>Fisheries Sector</h4>
+      <p>Catch records, vessel registration, aquaculture production, market prices, fisherfolk registry, processing & exports.</p>
+      <div class="meta"><span class="count" id="cardFish">10 files</span><span class="go">View →</span></div>
+    </div>
+    <div class="sector" data-sector="agriculture" style="--sc:rgba(34,197,94,.24)">
+      <div class="ico">🌾</div>
+      <h4>Agriculture Sector</h4>
+      <p>Farm registry, crop production, livestock & poultry, coop members, input purchases, loans, training & certifications.</p>
+      <div class="meta"><span class="count" id="cardAgri">10 files</span><span class="go">View →</span></div>
+    </div>
+    <div class="sector" data-sector="marketing" style="--sc:rgba(251,191,36,.24)">
+      <div class="ico">📈</div>
+      <h4>Marketing Sector</h4>
+      <p>Sales transactions, customer demographics, campaign performance, inventory, salesperson records & suppliers.</p>
+      <div class="meta"><span class="count" id="cardMktg">10 files</span><span class="go">View →</span></div>
+    </div>
+  </section>
+
+  <div class="sec-head" id="library">
+    <div class="bar"></div>
+    <h3>📚 Dataset Library</h3>
+    <p>Click <strong>Download</strong> to save a dataset to your device</p>
+  </div>
+
+  <section class="panel">
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="mag">🔍</span>
+        <input type="text" id="search" placeholder="Search dataset name or description…">
+      </div>
+      <div class="chips">
+        <button class="chip on" data-filter="all">All</button>
+        <button class="chip" data-filter="fisheries">🐟 Fisheries</button>
+        <button class="chip" data-filter="agriculture">🌾 Agriculture</button>
+        <button class="chip" data-filter="marketing">📈 Marketing</button>
+      </div>
+    </div>
+
+    <div class="lib-grid" id="libGrid"></div>
+
+    <details class="instr">
+      <summary>📘 For the Instructor — How to add files to the shared library</summary>
+      <div class="body">
+        <p>GitHub Pages cannot accept uploads from a webpage. To add a new dataset everyone can download:</p>
+        <ol style="padding-left:20px;margin:10px 0">
+          <li>Put the Excel file in the same folder as <code>index.html</code>.</li>
+          <li>Add a new entry to the <code>DATASETS</code> array inside the <code>&lt;script&gt;</code> tag of this file.</li>
+          <li>Commit and push to GitHub:</li>
+        </ol>
+        <pre style="background:rgba(0,0,0,.5);padding:14px;border-radius:10px;overflow-x:auto;margin:10px 0;border:1px solid var(--stroke);"><code>git add .
+git commit -m "Add new dataset"
+git push origin main</code></pre>
+        <p>The dataset appears in the shared library within seconds of the GitHub Pages deploy.</p>
+      </div>
+    </details>
+  </section>
+</div>
+
+<footer>
+  <div class="flogos">
+    <img src="department-logo.png" alt="CCSICT" onerror="this.style.display='none'">
+    <img src="school-logo.png" alt="ISU" onerror="this.style.display='none'">
+  </div>
+  <p>
+    <strong>Data Science Analytics Hub</strong><br>
+    Isabela State University · College of Computing Studies, Information and Communication Technology<br>
+    Course Material prepared by <strong>Engr. Lee-Mher S. Binay-an</strong>
+  </p>
+  <p class="sig">💚 Keep learning. Keep exploring. Padayon, future Data Scientists!</p>
+</footer>
+
+<div id="toasts"></div>
+
+<script>
+/* ============================================================
+   OFFICIAL DATASETS
+   ============================================================ */
+const DATASETS = [
+  // AGRICULTURE
+  { name: '01_Farm_Registry.xlsx', sector: 'agriculture', desc: 'Farm-level registry: farmer, region, area, crop, ownership, cooperative membership.' },
+  { name: '02_Crop_Production.xlsx', sector: 'agriculture', desc: 'Seasonal crop production by region, area planted, yield, farmgate price.' },
+  { name: '03_Livestock_Poultry.xlsx', sector: 'agriculture', desc: 'Livestock and poultry records: animal type, head count, feed cost, vaccination.' },
+  { name: '04_Agri_Cooperative_Members.xlsx', sector: 'agriculture', desc: 'Cooperative member registry: age, sex, farm size, years of membership, status.' },
+  { name: '05_Farm_Input_Purchases.xlsx', sector: 'agriculture', desc: 'Input purchases: seeds, fertilizer, pesticide, feeds, quantity, cost, supplier.' },
+  { name: '06_Harvest_Yield_Records.xlsx', sector: 'agriculture', desc: 'Harvest records: crop, area, total harvest, moisture content, quality grade, price.' },
+  { name: '07_AgriBusiness_Sales.xlsx', sector: 'agriculture', desc: 'Agribusiness sales: product, quantity, unit price, total amount, payment method.' },
+  { name: '08_Farm_Loans.xlsx', sector: 'agriculture', desc: 'Farm loans: borrower, lender, amount, interest rate, term, status.' },
+  { name: '09_Training_Programs.xlsx', sector: 'agriculture', desc: 'Training attendance: title, date, participant, age, sex, status, score.' },
+  { name: '10_Organic_Farming_Certifications.xlsx', sector: 'agriculture', desc: 'Organic certifications: farm name, certifying body, date, expiry, area, status.' },
+
+  // FISHERIES
+  { name: '01_Fish_Catch_Records.xlsx', sector: 'fisheries', desc: 'Catch logs by fisherfolk, species, gear, fishing ground, and selling price.' },
+  { name: '02_Fishing_Vessel_Registration.xlsx', sector: 'fisheries', desc: 'Vessel registration: owner, type, tonnage, engine HP, crew, license status.' },
+  { name: '03_Aquaculture_Production.xlsx', sector: 'fisheries', desc: 'Aquaculture production: species, area, stocking density, harvest, feed used.' },
+  { name: '04_Fish_Market_Prices.xlsx', sector: 'fisheries', desc: 'Fish market prices: market name, city, species, price per kg, volume, source.' },
+  { name: '05_Fisherfolk_Registry.xlsx', sector: 'fisheries', desc: 'Fisherfolk registry: age, sex, region, years of experience, association membership.' },
+  { name: '06_Fish_Processing.xlsx', sector: 'fisheries', desc: 'Fish processing batches: process type, raw material, finished product, yield, grade.' },
+  { name: '07_Municipal_vs_Commercial_Fishing.xlsx', sector: 'fisheries', desc: 'Comparison of municipal vs commercial fishing: vessels, catch, fisherfolk, revenue.' },
+  { name: '08_Fish_Export_Records.xlsx', sector: 'fisheries', desc: 'Fish export shipments: destination, product type, weight, value, shipping mode.' },
+  { name: '09_Fisheries_Equipment_Inventory.xlsx', sector: 'fisheries', desc: 'Equipment inventory: boat engine, cooler box, GPS, sonar, fish net, condition.' },
+  { name: '10_Fish_Hatchery_Operations.xlsx', sector: 'fisheries', desc: 'Hatchery operations: species, eggs collected, fry produced, hatch rate, mortality.' },
+
+  // MARKETING
+  { name: '01_Product_Sales_Transactions.xlsx', sector: 'marketing', desc: 'Product-level sales transactions across channels and payment methods.' },
+  { name: '02_Customer_Demographics.xlsx', sector: 'marketing', desc: 'Customer profiles: age, sex, region, occupation, income, preferred channel.' },
+  { name: '03_Marketing_Campaign_Performance.xlsx', sector: 'marketing', desc: 'Campaign performance: channel, budget, impressions, clicks, conversions, revenue.' },
+  { name: '04_Product_Inventory.xlsx', sector: 'marketing', desc: 'Product inventory: SKU, product name, category, warehouse, stock, reorder level.' },
+  { name: '05_Salesperson_Performance.xlsx', sector: 'marketing', desc: 'Salesperson performance: sales target, achieved, commission, rating, branch.' },
+  { name: '06_Online_Store_Orders.xlsx', sector: 'marketing', desc: 'Online store orders: platform, product, quantity, amount, shipping fee, status.' },
+  { name: '07_Retail_Store_Sales.xlsx', sector: 'marketing', desc: 'Retail store sales: store name, product, units sold, unit price, payment type.' },
+  { name: '08_Promotional_Discounts.xlsx', sector: 'marketing', desc: 'Promotional discounts: promo code, discount type, value, start/end date, usage.' },
+  { name: '09_Customer_Feedback.xlsx', sector: 'marketing', desc: 'Customer feedback: product, rating, comment, would recommend, channel.' },
+  { name: '10_Supplier_Records.xlsx', sector: 'marketing', desc: 'Supplier records: category supplied, contact person, years partner, rating, status.' }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let filter = 'all';
+let query = '';
+
+/* ============================================================
+   DOM
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const libGrid = $('libGrid');
+const searchEl = $('search');
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function esc(s){
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function toast(msg, type){
+  const box = $('toasts');
+  const t = document.createElement('div');
+  t.className = 'toast'+(type==='err'?' err':'');
+  t.textContent = msg;
+  box.appendChild(t);
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),420); },3400);
+}
+function iconFor(name){
+  const e = name.slice(name.lastIndexOf('.')).toLowerCase();
+  if(e==='.csv') return '📄';
+  if(e==='.xls'||e==='.xlsx'||e==='.xlsm') return '📊';
+  return '📁';
+}
+
+/* ============================================================
+   RENDER LIBRARY
+   ============================================================ */
+function renderLibrary(){
+  const q = query.trim().toLowerCase();
+  const list = DATASETS
+    .filter(f => filter==='all' || f.sector===filter)
+    .filter(f => !q ||
+        f.name.toLowerCase().includes(q) ||
+        f.desc.toLowerCase().includes(q))
+    .sort((a,b) => a.name.localeCompare(b.name));
+
+  if(!list.length){
+    libGrid.innerHTML = `
+      <div class="empty">
+        <span class="e-ico">🔍</span>
+        <strong>No datasets match your search</strong>
+        <small>Try a different keyword or sector filter.</small>
+      </div>`;
+    return;
+  }
+
+  libGrid.innerHTML = list.map(f=>{
+    const s = {
+      fisheries:{label:'Fisheries', icon:'🐟'},
+      agriculture:{label:'Agriculture', icon:'🌾'},
+      marketing:{label:'Marketing', icon:'📈'}
+    }[f.sector];
+
+    return `
+      <article class="file">
+        <div class="top">
+          <div class="ficon">${iconFor(f.name)}</div>
+          <div class="fname" title="${esc(f.name)}">${esc(f.name)}</div>
+        </div>
+        <div class="fdesc">${esc(f.desc)}</div>
+        <div class="finfo">
+          <span class="badge ${esc(f.sector)}">${s.icon} ${esc(s.label)}</span>
+          <span class="badge gray">XLSX</span>
+        </div>
+        <div class="acts">
+          <!-- FIXED: Added target="_blank" and ./ to force download/open -->
+          <a class="mini" href="./${esc(f.name)}" download target="_blank">⬇ Download</a>
+        </div>
+      </article>`;
+  }).join('');
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    chip.classList.add('on');
+    filter = chip.dataset.filter;
+    renderLibrary();
+  });
+});
+
+document.querySelectorAll('.sector').forEach(card=>{
+  card.addEventListener('click',()=>{
+    const s = card.dataset.sector;
+    filter = s;
+    document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.filter===s));
+    document.querySelectorAll('.sector').forEach(c=>c.classList.toggle('active',c===card));
+    renderLibrary();
+    document.getElementById('library').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+searchEl.addEventListener('input',e=>{ query=e.target.value; renderLibrary(); });
+
+$('enterBtn').addEventListener('click',()=>{
+  const m=$('welcomeModal');
+  m.classList.add('hide');
+  document.body.classList.remove('locked');
+  setTimeout(()=>m.remove(),520);
+  toast('💚 Welcome aboard! Happy exploring!');
+});
+
+/* Rotating cheers */
+const CHEERS = [
+  "💚 Ready ka na ba? Let's turn raw data into real insight!",
+  "🌱 Clean data today, confident decisions tomorrow.",
+  "🧠 Every dataset is a story waiting to be told — go find it!",
+  "🚀 Small steps in analysis lead to big breakthroughs.",
+  "📊 Pivot tables, charts, and models — you've got this!",
+  "✨ Be curious. Be patient. Be a data scientist.",
+  "🐍 One line of code at a time. Progress is progress!",
+  "🏆 Padayon, future Data Scientists — the world needs your skills!"
+];
+let cheerIdx = 0;
+const cheerEl = $('cheer');
+setInterval(()=>{
+  cheerEl.classList.add('swap');
+  setTimeout(()=>{
+    cheerIdx=(cheerIdx+1)%CHEERS.length;
+    cheerEl.textContent=CHEERS[cheerIdx];
+    cheerEl.classList.remove('swap');
+  },500);
+},5200);
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+renderLibrary();
+</script>
+</body>
+</html>
